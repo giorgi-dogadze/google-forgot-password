@@ -1,20 +1,45 @@
+// src/components/ForgotPasswordForm.tsx
 import React, { useState } from "react";
 
 const ForgotPasswordForm = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [isValid, setIsValid] = useState(false);
-  const correctName = "Your Answer"; // Replace with the correct answer
-  const correctPhone = "1234567890"; // Replace with the correct answer
+  const [isNameCorrect, setIsNameCorrect] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleNameChange = (e) => {
+    const inputValue = e.target.value;
+    setName(inputValue);
+    console.log("inputValue", JSON.stringify(inputValue, null, 4));
+    if (inputValue !== "") {
+      setIsNameCorrect(true);
+    } else {
+      setIsNameCorrect(false);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (name === correctName && phone === correctPhone) {
-      setIsValid(true);
-    } else {
-      setIsValid(false);
-    }
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsSubmitted(true);
+    }, 2000);
   };
+
+  if (isSubmitted) {
+    return (
+      <div style={styles.container}>
+        <div style={styles.celebrationContainer}>🎉</div>
+        <p style={styles.successMessage}>
+          Congrats! Your password was almost reset with the help of that
+          beautiful girl. In order to finalize the reset process, you should ask
+          her oute for helping you out in this process.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div style={styles.container}>
@@ -31,9 +56,12 @@ const ForgotPasswordForm = () => {
           <textarea
             style={styles.textarea}
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={handleNameChange}
             rows={3}
           />
+          {isNameCorrect && (
+            <p style={styles.confirmation}>✅ Correct answer!</p>
+          )}
         </div>
         <div style={styles.inputGroup}>
           <label style={styles.label}>What is her mobile number?</label>
@@ -45,17 +73,14 @@ const ForgotPasswordForm = () => {
           />
         </div>
         <button type="submit" style={styles.button}>
-          Submit
+          {isLoading ? "Loading..." : "Submit"}
         </button>
-        {isValid && (
-          <p style={styles.validationMessage}>Your answer is correct!</p>
-        )}
+        {isLoading && <div style={styles.spinner}></div>}
       </form>
     </div>
   );
 };
 
-// Styles (inspired by iPhone 15 Pro Max and Google's Forgot Password page)
 const styles = {
   container: {
     display: "flex",
@@ -77,7 +102,7 @@ const styles = {
     textAlign: "center",
     backgroundColor: "#fff",
     padding: "20px",
-    borderRadius: "8px",
+    borderRadius: "12px",
     boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
   },
   inputGroup: {
@@ -92,18 +117,18 @@ const styles = {
     color: "#555",
   },
   textarea: {
-    width: "100%",
+    width: "95%",
     padding: "10px",
     fontSize: "16px",
-    borderRadius: "4px",
+    borderRadius: "8px",
     border: "1px solid #ddd",
     resize: "none",
   },
   input: {
-    width: "100%",
+    width: "95%",
     padding: "10px",
     fontSize: "16px",
-    borderRadius: "4px",
+    borderRadius: "8px",
     border: "1px solid #ddd",
   },
   button: {
@@ -113,14 +138,46 @@ const styles = {
     color: "#fff",
     backgroundColor: "#4285F4",
     border: "none",
-    borderRadius: "4px",
+    borderRadius: "8px",
     cursor: "pointer",
-  },
-  validationMessage: {
     marginTop: "10px",
+  },
+  confirmation: {
+    marginTop: "8px",
     fontSize: "14px",
     color: "#34A853",
   },
+  spinner: {
+    border: "4px solid #f3f3f3",
+    borderTop: "4px solid #4285F4",
+    borderRadius: "50%",
+    width: "24px",
+    height: "24px",
+    animation: "spin 2s linear infinite",
+    margin: "10px auto",
+  },
+  successMessage: {
+    marginTop: "20px",
+    fontSize: "16px",
+    color: "#34A853",
+    textAlign: "center",
+    padding: "10px",
+  },
+  celebrationContainer: {
+    fontSize: "50px",
+    textAlign: "center",
+    marginBottom: "10px",
+  },
 };
+
+// Animation keyframes (Add to global CSS for the spinner)
+const styleSheet = document.styleSheets[0];
+const keyframes = `
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
 
 export default ForgotPasswordForm;
