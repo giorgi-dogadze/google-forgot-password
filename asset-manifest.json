@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/google-forgot-password/static/css/main.f855e6bc.css",
-    "main.js": "/google-forgot-password/static/js/main.b551570a.js",
+    "main.js": "/google-forgot-password/static/js/main.c04791bc.js",
     "static/js/453.0101f27a.chunk.js": "/google-forgot-password/static/js/453.0101f27a.chunk.js",
     "index.html": "/google-forgot-password/index.html",
     "main.f855e6bc.css.map": "/google-forgot-password/static/css/main.f855e6bc.css.map",
-    "main.b551570a.js.map": "/google-forgot-password/static/js/main.b551570a.js.map",
+    "main.c04791bc.js.map": "/google-forgot-password/static/js/main.c04791bc.js.map",
     "453.0101f27a.chunk.js.map": "/google-forgot-password/static/js/453.0101f27a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.b551570a.js"
+    "static/js/main.c04791bc.js"
   ]
 }
