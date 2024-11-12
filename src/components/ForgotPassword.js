@@ -1,23 +1,45 @@
-// src/components/ForgotPasswordForm.tsx
 import React, { useState } from "react";
 
 const ForgotPasswordForm = () => {
+  console.log("check ");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [isNameCorrect, setIsNameCorrect] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [language, setLanguage] = useState("en"); // 'en' for English, 'ka' for Georgian
 
+  const translations = {
+    en: {
+      title: "Reset Password Security Questions",
+      nameLabel: "Who is the most beautiful girl that you have seen?",
+      phoneLabel: "What is her mobile number?",
+      submitButton: "Submit",
+      successMessage:
+        "Congrats! Your password was almost reset with the help of that beautiful girl. In order to finalize the reset process, you should ask her out as a gesture for helping you out in this process.",
+      correctAnswer: "✅ Correct answer!",
+    },
+    ka: {
+      title: "პაროლის აღდგენის უსაფრთხოების კითხვები",
+      nameLabel: "ვინ არის ყველაზე ლამაზი გოგო, რომელიც ოდესმე გინახავს?",
+      phoneLabel: "რა არის მისი ტელეფონის ნომერი?",
+      submitButton: "გაგზავნა",
+      successMessage:
+        "გილოცავთ! თქვენი პაროლი თითქმის აღდგა იმ ლამაზი გოგოს დახმარებით. პაროლის აღდგენის პროცესის დასასრულებლად, უნდა დაპატიჟოთ სადმე იგი დახმარებისთვის მადლობის ნიშნად.",
+      correctAnswer: "✅ სწორი პასუხია!",
+    },
+  };
+  console.log("check 1s");
   const handleNameChange = (e) => {
     const inputValue = e.target.value;
     setName(inputValue);
-    console.log("inputValue", JSON.stringify(inputValue, null, 4));
     if (inputValue !== "") {
       setIsNameCorrect(true);
     } else {
       setIsNameCorrect(false);
     }
   };
+  console.log("check 2");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,82 +50,116 @@ const ForgotPasswordForm = () => {
     }, 2000);
   };
 
+  const toggleLanguage = () => {
+    setLanguage((prevLanguage) => (prevLanguage === "en" ? "ka" : "en"));
+  };
+  console.log("check 3");
+
+  const t = translations[language];
+
   if (isSubmitted) {
     return (
       <div style={styles.container}>
         <div style={styles.celebrationContainer}>🎉</div>
-        <p style={styles.successMessage}>
-          Congrats! Your password was almost reset with the help of that
-          beautiful girl. In order to finalize the reset process, you should ask
-          her oute for helping you out in this process.
-        </p>
+        <p style={styles.successMessage}>{t.successMessage}</p>
       </div>
     );
   }
-
+  console.log("check 5");
   return (
-    <div style={styles.container}>
+    <div style={styles.pageContainer}>
+      <button onClick={toggleLanguage} style={styles.languageToggle}>
+        {language === "en" ? "KA" : "EN"}
+      </button>
       <img
         src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
         alt="Google Logo"
         style={styles.logo}
       />
-      <form style={styles.form} onSubmit={handleSubmit}>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>
-            Who is the most beautiful girl that you have seen?
-          </label>
-          <textarea
-            style={styles.textarea}
-            value={name}
-            onChange={handleNameChange}
-            rows={3}
-          />
-          {isNameCorrect && (
-            <p style={styles.confirmation}>✅ Correct answer!</p>
-          )}
-        </div>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>What is her mobile number?</label>
-          <input
-            type="tel"
-            style={styles.input}
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-        </div>
-        <button type="submit" style={styles.button}>
-          {isLoading ? "Loading..." : "Submit"}
-        </button>
-        {isLoading && <div style={styles.spinner}></div>}
-      </form>
+      <div style={styles.container}>
+        <h2 style={styles.title}>{t.title}</h2>
+        <form style={styles.form} onSubmit={handleSubmit}>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>{t.nameLabel}</label>
+            <textarea
+              style={styles.textarea}
+              value={name}
+              onChange={handleNameChange}
+              rows={3}
+            />
+            {isNameCorrect && (
+              <p style={styles.confirmation}>{t.correctAnswer}</p>
+            )}
+          </div>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>{t.phoneLabel}</label>
+            <input
+              type="tel"
+              style={styles.input}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
+          <button type="submit" style={styles.button}>
+            {isLoading ? "Loading..." : t.submitButton}
+          </button>
+          {isLoading && <div style={styles.spinner}></div>}
+        </form>
+      </div>
     </div>
   );
 };
 
 const styles = {
-  container: {
+  pageContainer: {
+    position: "relative",
+    minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
-    minHeight: "100vh",
-    padding: "20px",
-    fontFamily: "Arial, sans-serif",
+    justifyContent: "flex-start",
+    paddingTop: "30px",
     backgroundColor: "#f9f9f9",
   },
   logo: {
+    position: "absolute",
+    top: "20px",
     width: "150px",
+  },
+  languageToggle: {
+    position: "absolute",
+    top: "20px",
+    right: "20px",
+    fontSize: "14px",
+    padding: "5px 10px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    backgroundColor: "#4285F4",
+    color: "#fff",
+    border: "none",
+  },
+  container: {
+    marginTop: "180px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    maxWidth: "400px",
+    width: "100%",
+    padding: "20px",
+    backgroundColor: "#fff",
+    borderRadius: "12px",
+    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+  },
+  title: {
+    fontSize: "25px",
+    fontWeight: "500",
+    color: "#555",
     marginBottom: "20px",
   },
   form: {
     width: "100%",
-    maxWidth: "400px",
     textAlign: "center",
-    backgroundColor: "#fff",
     padding: "20px",
-    borderRadius: "12px",
-    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
   },
   inputGroup: {
     marginBottom: "20px",
